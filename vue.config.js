@@ -38,7 +38,7 @@ module.exports = {
     },
     proxy: { 
       '/dev-api': {
-        target: 'http://gmall-h5-api.atguigu.cn', 
+        target: 'http://localhost:8081', 
         pathRewrite: {"/dev-api" : ""},
       },
     } 
