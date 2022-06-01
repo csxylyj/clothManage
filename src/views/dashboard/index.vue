@@ -1,20 +1,34 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
+    <div class="dashboard-text">账号: {{ name }}</div>
+      <div>
+        <table border="1">
+          <tr>
+            <th>编号</th>
+            <th>编号</th>
+            <th>编号</th>
+          </tr>
+        </table>
+      </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import user from '@/store/modules/user';
+import { mapGetters,mapState } from "vuex";
 
 export default {
-  name: 'Dashboard',
+  name: "Dashboard",
+  data(){
+    return{
+      list:[]
+    }
+  },
   computed: {
-    ...mapGetters([
-      'name'
-    ])
-  }
-}
+    ...mapGetters(["name"]),
+    ...mapState(["user"])
+  },
+};
 </script>
 
 <style lang="scss" scoped>

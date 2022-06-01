@@ -6,7 +6,8 @@ const getDefaultState = () => {
   return {
     token: getToken(),
     name: '',
-    avatar: ''
+    avatar: '',
+    user:{}
   }
 }
 
@@ -24,16 +25,22 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  GETUSERINFO:(state,user)=>{
+    state.user=user
   }
 }
 
 const actions = {
   async login({ commit }, userInfo) {
     const { username, password } = userInfo
-    let result = await login({ username: username.trim(), password: password })
-    if(result.code==20000){
+    console.log(11111)
+    let result = await login({ account: username.trim(), password: password })
+    if(result.code==1){
       console.log(result)
       commit('SET_TOKEN', result.data.token)
+      commit('SET_NAME', result.data.name)
+      commit('GETUSERINFO',result.data)
       setToken(result.data.token)
       return 'ok'
     }else{
@@ -46,13 +53,10 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
-
         if (!data) {
           return reject('Verification failed, please Login again.')
         }
-
         const { name, avatar } = data
-
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         resolve(data)
@@ -65,14 +69,10 @@ const actions = {
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
         removeToken() // must remove  token  first
         resetRouter()
         commit('RESET_STATE')
         resolve()
-      }).catch(error => {
-        reject(error)
-      })
     })
   },
 
@@ -87,7 +87,6 @@ const actions = {
 }
 
 export default {
-  namespaced: true,
   state,
   mutations,
   actions
